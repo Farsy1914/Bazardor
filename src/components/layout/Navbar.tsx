@@ -7,15 +7,16 @@ import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+// API Response অনুযায়ী নিখুঁত Slug নাম দেওয়া হয়েছে
 const categories = [
-  { name: "চাল", icon: "🍚", slug: "chal" },
+  { name: "চাল", icon: "🍚", slug: "rice" },
   { name: "ডাল", icon: "🫘", slug: "dal" },
   { name: "তেল", icon: "🛢️", slug: "oil" },
-  { name: "সবজি", icon: "🥬", slug: "vegetable" },
+  { name: "সবজি", icon: "🥬", slug: "vegetables" },
   { name: "মাছ", icon: "🐟", slug: "fish" },
   { name: "মাংস", icon: "🍗", slug: "meat" },
-  { name: "ডিম-দুধ", icon: "🥛", slug: "egg-milk" },
-  { name: "মসলা", icon: "🌶️", slug: "spice" },
+  { name: "ডিম-দুধ", icon: "🥛", slug: "dairy" },
+  { name: "মসলা", icon: "🌶️", slug: "spices" },
 ];
 
 export default function Navbar() {
@@ -78,7 +79,6 @@ export default function Navbar() {
                 <span className="text-[10px] text-gray-500">▼</span>
               </button>
 
-              {/* Exact Pop-up Match (Image 1) */}
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 z-50 space-y-3">
                   <div>
