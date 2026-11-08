@@ -1,13 +1,29 @@
+export interface Market {
+  market: string;
+  division: string;
+  min: number;
+  max: number;
+}
+
 export interface Product {
-  id: string;
+  id: string | number;
+  slug: string;
   name: string;
+  nameBn?: string;
   category: string;
-  categorySlug: string;
-  price: number;
+  categorySlug?: string;
+  categoryNameBn?: string;
+  categoryIcon?: string;
   unit: string;
+  image?: string;
+  price: number;
+  today?: number;
+  yesterday?: number;
+  lastWeek?: number;
+  lastMonth?: number;
   change: number;
   trend: 'up' | 'down' | 'same';
-  image?: string;
+  markets?: Market[];
   description?: string;
   updatedAt?: string;
 }
@@ -27,3 +43,11 @@ export interface UserProfile {
   image?: string;
   createdAt?: string;
 }
+
+export interface Market {
+  market: string;
+  division: string;
+  min: number;
+  max: number;
+}
+
