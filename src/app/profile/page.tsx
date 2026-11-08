@@ -1,97 +1,58 @@
 "use client";
 
-import { useSession, signOut } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { User, Mail, Calendar, LogOut, ShieldAlert } from "lucide-react";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client"; // Adjust path to your authClient
 
 export default function ProfilePage() {
-  const { data: session, isPending } = useSession();
-  const router = useRouter();
-
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/signin");
-  };
+  const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-4">
-        <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-        <p className="text-gray-500 text-sm">প্রোফাইল লোড হচ্ছে...</p>
+      <div className="min-h-[75vh] flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#008a45] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!session) {
     return (
-      <div className="max-w-md mx-auto px-4 py-16 text-center space-y-4">
-        <div className="bg-amber-50 border border-amber-200 text-amber-800 p-6 rounded-2xl space-y-3">
-          <ShieldAlert className="w-10 h-10 text-amber-600 mx-auto" />
-          <h2 className="text-lg font-bold">প্রোফাইল দেখতে সাইন ইন প্রয়োজন</h2>
-          <p className="text-sm text-amber-700">
-            এই পেজটি দেখতে অনুগ্রহ করে প্রথমে সাইন ইন করুন।
-          </p>
-          <Link
-            href="/signin"
-            className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-5 py-2 rounded-lg transition-colors mt-2"
-          >
-            সাইন ইন করুন
-          </Link>
-        </div>
+      <div className="min-h-[75vh] flex flex-col items-center justify-center text-center px-4">
+        <h2 className="text-xl font-bold text-gray-800">অ্যাকেস সংরক্ষিত</h2>
+        <p className="text-xs text-gray-500 mt-1 mb-4">প্রোফাইল দেখতে প্রথমে লগইন করুন।</p>
+        <Link
+          href="/login"
+          className="px-5 py-2.5 bg-[#008a45] text-white text-xs font-bold rounded-xl hover:bg-[#00753a] transition-colors"
+        >
+          লগইন করুন
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm space-y-6">
-        <div className="flex items-center gap-4 border-b pb-6">
-          <div className="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center font-bold text-2xl border-2 border-emerald-500">
-            {session.user?.name ? session.user.name[0].toUpperCase() : "U"}
+    <div className="min-h-[80vh] bg-[#f3f6f3] py-10 px-4">
+      <div className="max-w-md mx-auto bg-white rounded-3xl p-6 border border-gray-100 shadow-2xs space-y-6">
+        <h1 className="text-xl font-black text-gray-900 border-b border-gray-100 pb-4">আমার প্রোফাইল</h1>
+
+        {/* User Info */}
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 bg-[#008a45]/10 text-[#008a45] font-black text-2xl rounded-2xl flex items-center justify-center border border-[#008a45]/20">
+            {session.user.name ? session.user.name.charAt(0).toUpperCase() : "U"}
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{session.user?.name || "ইউজার"}</h1>
-            <p className="text-sm text-gray-500">ব্যক্তিগত প্রোফাইল বিবরণী</p>
+            <h2 className="font-bold text-gray-900 text-base">{session.user.name}</h2>
+            <p className="text-xs text-gray-400 mt-0.5">{session.user.email}</p>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-            <User className="w-5 h-5 text-gray-400" />
-            <div>
-              <p className="text-xs text-gray-500">নাম</p>
-              <p className="text-sm font-semibold text-gray-800">{session.user?.name}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-            <Mail className="w-5 h-5 text-gray-400" />
-            <div>
-              <p className="text-xs text-gray-500">ইমেইল</p>
-              <p className="text-sm font-semibold text-gray-800">{session.user?.email}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-            <Calendar className="w-5 h-5 text-gray-400" />
-            <div>
-              <p className="text-xs text-gray-500">অ্যাকাউন্ট যোগদানের তারিখ</p>
-              <p className="text-sm font-semibold text-gray-800">
-                {new Date(session.user?.createdAt || Date.now()).toLocaleDateString("bn-BD")}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-4 border-t">
-          <button
-            onClick={handleSignOut}
-            className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-2.5 rounded-xl text-sm transition-colors border border-red-200"
+        {/* Challenge C3: Update Information Button */}
+        <div className="pt-2">
+          <Link
+            href="/profile/update"
+            className="w-full inline-block text-center bg-[#008a45] hover:bg-[#00753a] text-white font-bold text-xs py-3 rounded-xl transition-colors shadow-2xs"
           >
-            <LogOut className="w-4 h-4" />
-            <span>সাইন আউট করুন</span>
-          </button>
+            Update Information
+          </Link>
         </div>
       </div>
     </div>
